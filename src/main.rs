@@ -94,7 +94,7 @@ async fn create_user(
     Json(payload): Json<models::UserRaw>,
 ) -> Result<Json<models::User>, (StatusCode, String)> {
     let row =
-        sqlx::query_as::<_, (i64,)>("INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id")
+        sqlx::query_as::<_, (i32,)>("INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id")
             .bind(&payload.name)
             .bind(&payload.email)
             .fetch_one(&state.db)
@@ -114,7 +114,7 @@ async fn create_user(
 }
 
 async fn delete_user(
-    Path(id): Path<i64>,
+    Path(id): Path<i32>,
     State(state): State<AppState>,
 ) -> Result<StatusCode, (StatusCode, String)> {
     let result = sqlx::query("DELETE FROM users WHERE id = $1")
