@@ -33,7 +33,7 @@ Then run the server binary `./leptos-full-stack` and head to 127.0.0.1:3000 in y
 - Full-Stack with Leptos
 - Rust from front to back
 - Axum REST API integration
-- SQLite database
+- PostgreSQL database
 - SQLx for database integration
 - CORS configured
 - Reactive user interface
