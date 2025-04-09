@@ -8,14 +8,14 @@ use leptos::logging::log;
 use leptos::prelude::*;
 use leptos_axum::{generate_route_list, LeptosRoutes};
 use leptos_full_stack::app::*;
-use sqlx::SqlitePool;
+use sqlx::PgPool;
 use tower_http::cors::{Any, CorsLayer};
 
 mod models;
 
 #[derive(Clone)]
 struct AppState {
-    db: SqlitePool,
+    db: PgPool,
 }
 
 #[cfg(feature = "ssr")]
@@ -27,7 +27,7 @@ async fn main() {
 
     dotenv().ok();
 
-    let db = SqlitePool::connect(&std::env::var("DATABASE_URL").unwrap())
+    let db = PgPool::connect(&std::env::var("DATABASE_URL").unwrap())
         .await
         .expect("Failed to connect to database");
 
@@ -93,20 +93,21 @@ async fn create_user(
     State(state): State<AppState>,
     Json(payload): Json<models::UserRaw>,
 ) -> Result<Json<models::User>, (StatusCode, String)> {
-    let result = sqlx::query("INSERT INTO users (name, email) VALUES (?, ?)")
-        .bind(&payload.name)
-        .bind(&payload.email)
-        .execute(&state.db)
-        .await
-        .map_err(|err| {
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                format!("Insert error: {}", err),
-            )
-        })?;
+    let row =
+        sqlx::query_as::<_, (i64,)>("INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id")
+            .bind(&payload.name)
+            .bind(&payload.email)
+            .fetch_one(&state.db)
+            .await
+            .map_err(|err| {
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    format!("Insert error: {}", err),
+                )
+            })?;
 
     Ok(Json(models::User {
-        id: result.last_insert_rowid(),
+        id: row.0,
         name: payload.name,
         email: payload.email,
     }))
@@ -116,7 +117,7 @@ async fn delete_user(
     Path(id): Path<i64>,
     State(state): State<AppState>,
 ) -> Result<StatusCode, (StatusCode, String)> {
-    let result = sqlx::query("DELETE FROM users WHERE id = ?")
+    let result = sqlx::query("DELETE FROM users WHERE id = $1")
         .bind(id)
         .execute(&state.db)
         .await
