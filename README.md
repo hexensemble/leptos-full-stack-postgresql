@@ -4,7 +4,7 @@ Example Rust full-stack built with Leptos, Axum, and SQLx. 🧱
 
 List, add, and delete users from a PostgreSQL database.
 
-This is the PostgreSQL version of [Leptos Full-Stack](https://github.com/hexensemble/leptos-full-stack) which uses SQLite.
+For SQLite see [Leptos Full-Stack](https://github.com/hexensemble/leptos-full-stack).
 
 <br>
 
