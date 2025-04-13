@@ -4,27 +4,33 @@ Example Rust full-stack built with Leptos, Axum, and SQLx. 🧱
 
 List, add, and delete users from a PostgreSQL database.
 
+This is the PostgreSQL version of [Leptos Full-Stack](https://github.com/hexensemble/leptos-full-stack) which uses SQLite.
+
 <br>
 
 ![Leptos Full Stack](preview.png)
 
-**Download:** https://github.com/hexensemble/leptos-full-stack/releases
+<br>
 
-Pre-compiled for Linux.
+To build and run this project, you’ll need:
+
+- Docker
+- Docker Compose
 
 <br>
 
-Set the following environment variables:
+Clone the repo:
 
 ```
-export LEPTOS_OUTPUT_NAME="leptos-full-stack"
-export LEPTOS_SITE_ROOT="site"
-export LEPTOS_SITE_PKG_DIR="pkg"
-export LEPTOS_SITE_ADDR="127.0.0.1:3000"
-export LEPTOS_RELOAD_PORT="3001"
+git clone https://github.com/hexensemble/leptos-full-stack-postgresql.git
+cd leptos-full-stack-postgresql
 ```
 
-Then run the server binary `./leptos-full-stack` and head to 127.0.0.1:3000 in your browser.
+Then run the app:
+
+```
+docker compose up --build
+```
 
 <br>
 
