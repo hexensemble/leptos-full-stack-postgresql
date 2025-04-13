@@ -1,0 +1,25 @@
+services:
+  postgres-leptos-full-stack:
+    image: postgres:latest
+    container_name: postgres-leptos-full-stack
+    environment:
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: leptos-full-stack
+    depends_on:
+      - postgres-leptos-full-stack
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    environment:
+      RUST_LOG: info
+
+volumes:
+  postgres-data:
