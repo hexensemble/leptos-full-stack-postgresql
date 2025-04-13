@@ -26,11 +26,13 @@ git clone https://github.com/hexensemble/leptos-full-stack-postgresql.git
 cd leptos-full-stack-postgresql
 ```
 
-Then run the app:
+Run the app:
 
 ```
 docker compose up --build
 ```
+
+Then head to http://localhost:3000 in your browser.
 
 <br>
 
